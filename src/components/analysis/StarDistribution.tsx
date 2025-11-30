@@ -35,12 +35,12 @@ export const StarDistribution: React.FC<StarDistributionProps> = ({
   const total = Object.values(distribution).reduce((a, b) => a + b, 0);
 
   return (
-    <Card className="h-full">
-      <CardHeader>
+    <Card className="h-full flex flex-col">
+      <CardHeader className="flex-shrink-0">
         <CardTitle>星级分布 (总计: {total})</CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="h-[300px] mb-4">
+      <CardContent className="flex-1 flex flex-col overflow-hidden">
+        <div className="h-[240px] mb-4 flex-shrink-0">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={data}
@@ -74,7 +74,7 @@ export const StarDistribution: React.FC<StarDistributionProps> = ({
         </div>
         
         {/* 文字形式条形图 */}
-        <div className="space-y-2 border-t pt-4">
+        <div className="space-y-2 border-t pt-4 flex-1 overflow-y-auto">
           <div className="text-sm font-semibold text-slate-700 mb-3">文字形式分布</div>
           {data.map((entry, index) => (
             <div key={index} className="flex items-center gap-3">

@@ -1,1 +1,85 @@
 @import "tailwindcss";
+
+/* 打印样式 */
+@media print {
+  @page {
+    size: A4;
+    margin: 1.5cm;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  /* 隐藏不需要打印的元素 */
+  .no-print,
+  .no-print *,
+  button:not(.print-keep),
+  header,
+  nav,
+  aside {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /* 确保打印内容可见 */
+  .print-content,
+  .print-content * {
+    visibility: visible !important;
+    display: block !important;
+  }
+
+  /* 优化打印布局 */
+  .print-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* 确保所有 section 都显示 */
+  section {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    display: block !important;
+    visibility: visible !important;
+  }
+
+  /* 确保卡片和内容完整显示 */
+  [class*="Card"],
+  .card {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    display: block !important;
+    visibility: visible !important;
+  }
+
+  /* 网格布局在打印时正常显示 */
+  .grid {
+    display: grid !important;
+  }
+
+  /* 确保高度一致 */
+  .h-\[400px\] {
+    height: 400px !important;
+  }
+
+  /* 图表和卡片优化 */
+  canvas,
+  svg {
+    max-width: 100% !important;
+    height: auto !important;
+    page-break-inside: avoid;
+  }
+
+  /* 确保所有文本可见 */
+  * {
+    color: #000 !important;
+  }
+
+  /* 确保 flex 布局正常 */
+  .flex {
+    display: flex !important;
+  }
+}

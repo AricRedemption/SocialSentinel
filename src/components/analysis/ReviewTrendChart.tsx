@@ -18,11 +18,11 @@ interface ReviewTrendChartProps {
 
 export const ReviewTrendChart: React.FC<ReviewTrendChartProps> = ({ data }) => {
   return (
-    <Card className="h-full">
-      <CardHeader>
+    <Card className="h-full flex flex-col">
+      <CardHeader className="flex-shrink-0">
         <CardTitle>评论时间趋势</CardTitle>
       </CardHeader>
-      <CardContent className="h-[300px]">
+      <CardContent className="flex-1 min-h-0">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
             data={data}

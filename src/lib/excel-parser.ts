@@ -17,9 +17,7 @@ const REQUIRED_COLUMNS = [
     '评论人主页',
     '红人计划链接',
     '评论时间',
-    // '评分' // Adding this tentatively as it's needed for analysis, though not in strict list. 
-    // If strict list is absolute, I can't calculate stars. 
-    // But I'll look for it.
+    'rate', // 根据系统提示词，rate 是必需字段
 ];
 
 export const parseExcel = async (file: File): Promise<Review[]> => {
@@ -38,34 +36,33 @@ export const parseExcel = async (file: File): Promise<Review[]> => {
                     return;
                 }
 
-                // Validate columns
+                // Validate columns - 严格匹配所有必需字段
                 const firstRow = jsonData[0] as any;
                 const missingColumns = REQUIRED_COLUMNS.filter(col => !(col in firstRow));
 
-                // Note: strictly following the prompt, if columns are missing, we reject.
-                // However, I'll be lenient on '评分' for now and check if it exists to map it.
-                // The prompt explicitly lists columns to parse.
-                // If '评分' is not in the list, I shouldn't require it, but then I can't do star analysis.
-                // I will assume the prompt list was slightly incomplete regarding '评分' or 'Stars' 
-                // and try to find a column that looks like rating (e.g. '评分', 'Star', 'Rating').
-
                 if (missingColumns.length > 0) {
-                    // Check if it's just 'rate' missing or others.
-                    // If strict columns from prompt are missing, reject.
-                    const strictMissing = missingColumns.filter(c => c !== 'rate');
-                    if (strictMissing.length > 0) {
-                        reject(new Error(`文件缺少必要字段: ${strictMissing.join(', ')}. 请确认是否为 Sellersprite/领星 导出的原始评论数据.`));
+                    // 如果缺少任何必需字段（包括 rate），拒绝文件
+                    reject(new Error(`文件缺少必要字段: ${missingColumns.join(', ')}. 请确认是否为 Sellersprite/领星 导出的原始评论数据.`));
                         return;
-                    }
                 }
 
                 const reviews: Review[] = jsonData.map((row: any) => {
-                    // Try to find rating
+                    // 根据系统提示词，rate 是必需字段，应该总是存在
+                    // 但为了兼容性，如果 rate 字段值为空，尝试从其他字段推断
                     let rating = 0;
-                    if ('rate' in row) rating = parseFloat(row['rate']);
-                    else if ('评分' in row) rating = parseFloat(row['评分']); // Fallback for old format
-                    else if ('Star' in row) rating = parseFloat(row['Star']);
-                    else if ('Rating' in row) rating = parseFloat(row['Rating']);
+                    if (row['rate'] !== undefined && row['rate'] !== null && row['rate'] !== '') {
+                        rating = parseFloat(row['rate']);
+                    } else {
+                        // Fallback: 尝试从其他可能的字段名获取（仅作为兼容性处理）
+                        if ('评分' in row && row['评分']) rating = parseFloat(row['评分']);
+                        else if ('Star' in row && row['Star']) rating = parseFloat(row['Star']);
+                        else if ('Rating' in row && row['Rating']) rating = parseFloat(row['Rating']);
+                    }
+
+                    // 确保 rating 是有效数字
+                    if (isNaN(rating) || rating < 0 || rating > 5) {
+                        rating = 0;
+                    }
 
                     return {
                         asin: row['ASIN'] || '',

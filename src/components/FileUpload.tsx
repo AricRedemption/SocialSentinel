@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useState } from "react";
-import { Upload, X } from "lucide-react";
+import { Upload, X, FileDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 
@@ -114,6 +114,25 @@ export const FileUpload: React.FC<FileUploadProps> = ({
             {error}
           </div>
         )}
+      </div>
+
+      {/* 模板文件下载链接 */}
+      <div className="mt-6 text-center">
+        <a
+          href="/mock_reviews.xlsx"
+          download="mock_reviews.xlsx"
+          className="inline-flex items-center gap-2 px-4 py-2 text-sm text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors border border-blue-200"
+          onClick={(e) => {
+            // 确保链接正常下载
+            e.stopPropagation();
+          }}
+        >
+          <FileDown size={16} />
+          下载示例模板文件
+        </a>
+        <p className="text-xs text-slate-500 mt-2">
+          下载示例文件查看标准格式要求
+        </p>
       </div>
     </div>
   );
