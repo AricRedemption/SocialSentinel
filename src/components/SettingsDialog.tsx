@@ -23,7 +23,7 @@ import { Settings, CheckCircle2, XCircle, Loader2 } from "lucide-react";
 import { useSettings } from "@/lib/settings-context";
 import Image from "next/image";
 
-export type LLMProvider = "openai" | "deepseek" | "claude" | "zhipu";
+export type LLMProvider = "openai" | "deepseek" | "claude" | "zhipu" | "doubao";
 
 export interface LLMSettings {
   provider: LLMProvider;
@@ -45,6 +45,7 @@ const DEFAULT_MODELS: Record<LLMProvider, string> = {
   deepseek: "deepseek-chat",
   claude: "claude-sonnet-4-5-20250929",
   zhipu: "glm-4.6",
+  doubao: "doubao-pro-32k",
 };
 
 const PROVIDER_DEFAULTS: Record<
@@ -77,19 +78,15 @@ const PROVIDER_DEFAULTS: Record<
   },
   zhipu: {
     baseUrl: "https://open.bigmodel.cn/api/anthropic",
+    models: ["GLM-4.6", "GLM-4.5", "GLM-4.5-air"],
+  },
+  doubao: {
+    baseUrl: "https://ark.cn-beijing.volces.com/api/v3",
     models: [
-      "glm-4.6",
-      "glm-4.5",
-      "glm-4.5-x",
-      "glm-4.5-air",
-      "glm-4.5-airx",
-      "glm-4-plus",
-      "glm-4-air-250414",
-      "glm-4-long",
-      "glm-4-airx",
-      "glm-4-flashx-250414",
-      "glm-4.5-flash",
-      "glm-4-flash-250414",
+      "Doubao-Seed-Code",
+      "Doubao-Seed-1.6-lite",
+      "Doubao-Seed-1.6",
+      "Doubao-Seed-1.6-thinking",
     ],
   },
 };
@@ -203,9 +200,7 @@ export const SettingsDialog: React.FC<SettingsDialogProps> = ({
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] !rounded-xl !border-slate-200 !bg-white !text-slate-900 !shadow-sm dark:!bg-white dark:!border-slate-200 dark:!text-slate-900">
         <DialogHeader>
-          <DialogTitle className="text-slate-900">
-            AI 模型设置
-          </DialogTitle>
+          <DialogTitle className="text-slate-900">AI 模型设置</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
@@ -227,6 +222,7 @@ export const SettingsDialog: React.FC<SettingsDialogProps> = ({
                   <SelectItem value="deepseek">DeepSeek</SelectItem>
                   <SelectItem value="claude">Claude (Anthropic)</SelectItem>
                   <SelectItem value="zhipu">智谱 AI (Zhipu)</SelectItem>
+                  <SelectItem value="doubao">豆包 (Doubao)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
