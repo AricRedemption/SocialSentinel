@@ -50,9 +50,9 @@ export const parseExcel = async (file: File): Promise<Review[]> => {
                 // and try to find a column that looks like rating (e.g. '评分', 'Star', 'Rating').
 
                 if (missingColumns.length > 0) {
-                    // Check if it's just '评分' missing or others.
+                    // Check if it's just 'rate' missing or others.
                     // If strict columns from prompt are missing, reject.
-                    const strictMissing = missingColumns.filter(c => c !== '评分');
+                    const strictMissing = missingColumns.filter(c => c !== 'rate');
                     if (strictMissing.length > 0) {
                         reject(new Error(`文件缺少必要字段: ${strictMissing.join(', ')}. 请确认是否为 Sellersprite/领星 导出的原始评论数据.`));
                         return;
@@ -62,7 +62,8 @@ export const parseExcel = async (file: File): Promise<Review[]> => {
                 const reviews: Review[] = jsonData.map((row: any) => {
                     // Try to find rating
                     let rating = 0;
-                    if ('评分' in row) rating = parseFloat(row['评分']);
+                    if ('rate' in row) rating = parseFloat(row['rate']);
+                    else if ('评分' in row) rating = parseFloat(row['评分']); // Fallback for old format
                     else if ('Star' in row) rating = parseFloat(row['Star']);
                     else if ('Rating' in row) rating = parseFloat(row['Rating']);
 

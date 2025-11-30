@@ -51,9 +51,20 @@ export interface AnalysisResult {
   productInfo: {
     mainAsin: string;
     title: string;
+    category?: string; // 产品分类（基于标题提取）
     totalReviews: number;
+    variantStatsByAsin?: { [asin: string]: number }; // 按 ASIN 统计
+    variantStatsByModel?: { [model: string]: number }; // 按型号统计
   };
   starDistribution: { [key: number]: number };
+  starDistributionPercent?: { [key: number]: number }; // 百分比
+  starDistributionText?: { [key: number]: string }; // 文字条形图
+  sentimentAnalysis?: {
+    positive: number; // 百分比
+    neutral: number;
+    negative: number;
+    summary: string; // 简短中文分析
+  };
   variantAnalysis: {
     [variant: string]: {
       count: number;
@@ -71,7 +82,33 @@ export interface AnalysisResult {
     pros: ProConItem[];
     cons: ProConItem[];
   };
+  returnReasons?: ReturnReason[]; // 退货原因与差评来源
+  improvementSuggestions?: ImprovementSuggestion[]; // 产品改进建议
   reviewsOverTime: { date: string; count: number }[];
+  typicalReviews?: TypicalReview[]; // 典型评论展示
+}
+
+export interface ReturnReason {
+  reason: string; // 退货原因
+  evidence: string[]; // 具体评论证据
+  frequency: number; // 出现频率
+}
+
+export interface ImprovementSuggestion {
+  suggestion: string; // 改进建议
+  evidence: string; // 对应的文本证据
+  priority: "high" | "medium" | "low"; // 优先级
+}
+
+export interface TypicalReview {
+  originalText: string; // 英文原文
+  translatedText: string; // 中文翻译
+  rating: number; // 星级
+  reviewUrl: string; // 评论链接
+  aiInsight: string; // AI 一句话洞察
+  typicalReason: string; // 典型原因（为什么这条评论典型）
+  weight: number; // 权重（0-100，表示典型程度）
+  tags: string[]; // 标签（如：["好评", "产品质量", "电池续航"]）
 }
 
 export interface TopicCluster {

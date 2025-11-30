@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 import Anthropic from "@anthropic-ai/sdk";
+import { getQAPrompt } from "@/lib/system-prompt";
 
 export const runtime = "edge";
 
@@ -13,22 +14,18 @@ export async function POST(req: NextRequest) {
             return new NextResponse("Missing API Key", { status: 400 });
         }
 
-        const systemPrompt = `You are an intelligent assistant analyzing Amazon product reviews.
-User has provided the following context from the reviews:
-${context}
+        const systemPrompt = getQAPrompt(context || "");
 
-Please answer the user's question based on this context. If the answer is not in the context, use your general knowledge but mention that it's not from the specific data.
-Keep answers concise and helpful. Use Chinese language.`;
-
-        if (provider === "claude") {
+        // 智谱 AI 使用 Anthropic 兼容的 API，所以也使用 Anthropic SDK
+        if (provider === "claude" || provider === "zhipu") {
             const anthropic = new Anthropic({
                 apiKey: apiKey,
                 baseURL: baseUrl || undefined, // Anthropic SDK uses 'baseURL', not 'baseUrl'
             });
 
             const stream = await anthropic.messages.create({
-                model: model || "claude-3-5-sonnet-20240620",
-                max_tokens: 1024,
+                model: model || (provider === "zhipu" ? "glm-4.6" : "claude-3-5-sonnet-20240620"),
+                max_tokens: 4096,
                 messages: messages.map((m: any) => ({
                     role: m.role,
                     content: m.content,

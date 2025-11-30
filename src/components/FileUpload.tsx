@@ -82,6 +82,14 @@ export const FileUpload: React.FC<FileUploadProps> = ({
           disabled={isAnalyzing}
         />
 
+        <div className="mb-6 w-32 h-32 relative">
+          <img
+            src="/assets/coze/waving-gradient.png"
+            alt="Welcome"
+            className="w-full h-full object-contain drop-shadow-sm"
+          />
+        </div>
+
         <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-4 shadow-sm">
           <Upload size={32} />
         </div>

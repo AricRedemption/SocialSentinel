@@ -72,7 +72,7 @@ const generateMockData = () => {
             '评论人主页': '',
             '红人计划链接': '',
             '评论时间': new Date(Date.now() - Math.floor(Math.random() * 10000000000)).toISOString().split('T')[0],
-            '评分': rating // Adding this column as per our parser logic
+            'rate': rating
         });
     }
 
