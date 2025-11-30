@@ -14,6 +14,7 @@ import { ChatInterface } from "./ChatInterface";
 import { SettingsDialog } from "./SettingsDialog";
 import { ConnectionStatusIndicator } from "./ConnectionStatusIndicator";
 import { Download, RefreshCw } from "lucide-react";
+import Image from "next/image";
 
 interface DashboardProps {
   analysis: AnalysisResult;
@@ -62,16 +63,6 @@ export const Dashboard: React.FC<DashboardProps> = ({
           </div>
         </div>
         <div className="flex gap-3 items-center">
-          <div className="flex items-center gap-2 mr-2 px-3 py-1.5 bg-blue-50/50 rounded-full border border-blue-100">
-            <span className="text-xs text-slate-500 font-medium">
-              Powered by
-            </span>
-            <img
-              src="/assets/coze/logo.png"
-              alt="Coze"
-              className="h-5 w-auto object-contain"
-            />
-          </div>
           <ConnectionStatusIndicator />
           <SettingsDialog />
           <button
@@ -111,7 +102,16 @@ export const Dashboard: React.FC<DashboardProps> = ({
 
       {/* Topic Clusters */}
       <section>
-        <h2 className="text-2xl font-bold text-slate-800 mb-4">主题聚类</h2>
+        <div className="flex items-center gap-3 mb-4">
+          <h2 className="text-2xl font-bold text-slate-800">主题聚类</h2>
+          <Image
+            src="/assets/coze/waving-dark.png"
+            alt="Topic Clusters"
+            width={40}
+            height={40}
+            className="h-10 w-auto object-contain"
+          />
+        </div>
         <TopicClusters clusters={analysis.topicClusters} />
       </section>
 
@@ -119,9 +119,11 @@ export const Dashboard: React.FC<DashboardProps> = ({
       <section>
         <div className="flex items-center gap-3 mb-4">
           <h2 className="text-2xl font-bold text-slate-800">用户洞察</h2>
-          <img
+          <Image
             src="/assets/coze/with-friends.png"
             alt="User Insights"
+            width={40}
+            height={40}
             className="h-10 w-auto object-contain"
           />
         </div>

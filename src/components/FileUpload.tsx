@@ -3,6 +3,7 @@
 import React, { useCallback, useState } from "react";
 import { Upload, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 interface FileUploadProps {
   onFileSelect: (file: File) => void;
@@ -83,10 +84,11 @@ export const FileUpload: React.FC<FileUploadProps> = ({
         />
 
         <div className="mb-6 w-32 h-32 relative">
-          <img
+          <Image
             src="/assets/coze/waving-gradient.png"
             alt="Welcome"
-            className="w-full h-full object-contain drop-shadow-sm"
+            fill
+            className="object-contain drop-shadow-sm"
           />
         </div>
 

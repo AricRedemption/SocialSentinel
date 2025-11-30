@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/select";
 import { Settings, CheckCircle2, XCircle, Loader2 } from "lucide-react";
 import { useSettings } from "@/lib/settings-context";
+import Image from "next/image";
 
 export type LLMProvider = "openai" | "deepseek" | "claude" | "zhipu";
 
@@ -202,12 +203,7 @@ export const SettingsDialog: React.FC<SettingsDialogProps> = ({
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] !rounded-xl !border-slate-200 !bg-white !text-slate-900 !shadow-sm dark:!bg-white dark:!border-slate-200 dark:!text-slate-900">
         <DialogHeader>
-          <DialogTitle className="text-slate-900 flex items-center gap-2">
-            <img
-              src="/assets/coze/waving-dark.png"
-              alt="Settings"
-              className="h-6 w-auto object-contain"
-            />
+          <DialogTitle className="text-slate-900">
             AI 模型设置
           </DialogTitle>
         </DialogHeader>

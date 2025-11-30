@@ -10,14 +10,19 @@ import { AlertCircle, Info } from "lucide-react";
 import { useSettings } from "@/lib/settings-context";
 import { SettingsDialog } from "@/components/SettingsDialog";
 import { ConnectionStatusIndicator } from "@/components/ConnectionStatusIndicator";
+import { saveHistory } from "@/lib/storage";
+import { HistoryList } from "@/components/HistoryList";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const { settings, isConfigured } = useSettings();
+  const router = useRouter();
   const [reviews, setReviews] = useState<Review[] | null>(null);
   const [analysis, setAnalysis] = useState<AnalysisResult | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [analysisError, setAnalysisError] = useState<string | null>(null);
+  const [currentReportId, setCurrentReportId] = useState<string | null>(null);
 
   const handleFileSelect = async (file: File) => {
     setIsAnalyzing(true);
@@ -27,6 +32,7 @@ export default function Home() {
     // 先清除旧数据，确保重新上传时清除所有状态
     setReviews(null);
     setAnalysis(null);
+    setCurrentReportId(null);
     
     try {
       // 1. Parse Excel
@@ -42,16 +48,12 @@ export default function Home() {
       // 3. Analyze Data (async now)
       const result = await analyzeReviews(parsedReviews, settings);
 
-      // 4. Update State
-      setReviews(parsedReviews);
-      setAnalysis(result);
+      // 4. Save to history and get report ID
+      const reportId = saveHistory(parsedReviews, result, file.name);
+      setCurrentReportId(reportId);
 
-      // If analysis failed but we have basic stats, show warning
-      if (!isConfigured || !settings?.apiKey) {
-        setAnalysisError(
-          "仅显示基础统计。配置 API Key 后可获取完整的 NLP 分析（主题聚类、情绪分析、优缺点等）。"
-        );
-      }
+      // 5. Navigate to report detail page
+      router.push(`/report/${reportId}`);
     } catch (err: unknown) {
       console.error(err);
       const errorMessage =
@@ -69,6 +71,11 @@ export default function Home() {
     setAnalysis(null);
     setError(null);
     setAnalysisError(null);
+    setCurrentReportId(null);
+  };
+
+  const handleHistorySelect = (id: string) => {
+    router.push(`/report/${id}`);
   };
 
   return (
@@ -104,6 +111,11 @@ export default function Home() {
               <p>{analysisError}</p>
             </div>
           )}
+
+          {/* 历史记录列表 */}
+          <div className="w-full max-w-4xl mt-12 pb-8">
+            <HistoryList onSelect={handleHistorySelect} />
+          </div>
         </div>
       ) : (
         <Dashboard

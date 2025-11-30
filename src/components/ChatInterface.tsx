@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { Send, User } from "lucide-react";
+import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Review, AnalysisResult } from "@/lib/types";
 import { useSettings } from "@/lib/settings-context";
@@ -413,16 +414,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   return (
     <Card className="h-[600px] flex flex-col">
       <CardHeader className="border-b py-3">
-        <CardTitle className="flex items-center gap-2">
-          <div className="w-8 h-8 relative flex items-center justify-center bg-blue-50 rounded-lg p-1">
-            <img
-              src="/assets/coze/logo.png"
-              alt="Coze AI"
-              className="w-full h-full object-contain"
-            />
-          </div>
-          <span>AI 智能问答</span>
-        </CardTitle>
+        <CardTitle>AI 智能问答</CardTitle>
       </CardHeader>
       <CardContent className="flex-1 flex flex-col p-0 overflow-hidden">
         <div
@@ -445,8 +437,10 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
               >
                 {msg.role === "assistant" && (
                   <div className="mt-1 shrink-0 w-8 h-8 rounded-full overflow-hidden bg-blue-50 border border-blue-100 p-1">
-                    <img
-                      src="/assets/coze/smiling.png"
+                    <Image
+                      src="/assets/coze/goggles.png"
+                      width={32}
+                      height={32}
                       className="w-full h-full object-contain"
                       alt="AI"
                     />
@@ -465,8 +459,10 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
             <div className="flex justify-start">
               <div className="bg-white border shadow-sm p-3 rounded-lg rounded-bl-none flex items-center gap-2">
                 <div className="w-6 h-6 shrink-0">
-                  <img
+                  <Image
                     src="/assets/coze/goggles.png"
+                    width={24}
+                    height={24}
                     className="w-full h-full object-contain animate-pulse"
                     alt="Thinking"
                   />
